@@ -3,15 +3,15 @@ package middleware
 import (
 	"bytes"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 var recoverMiddleware gin.HandlerFunc = func(c *gin.Context) {
@@ -69,7 +69,7 @@ func stack(skip int) []byte {
 		// Print this much at least.  If we can't find the source, it won't show.
 		_, _ = fmt.Fprintf(buf, "%s:%d (0x%x)\n", file, line, pc)
 		if file != lastFile {
-			data, err := ioutil.ReadFile(file)
+			data, err := os.ReadFile(file)
 			if err != nil {
 				continue
 			}
