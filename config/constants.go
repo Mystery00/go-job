@@ -15,12 +15,6 @@ const (
 )
 
 const (
-	RedisMasterName = "redis.masterName"
-	RedisAddr       = "redis.address"
-	RedisPassword   = "redis.password"
-)
-
-const (
 	LogLocal = "log.local"
 	LogHome  = "log.home"
 	LogFile  = "log.file"
