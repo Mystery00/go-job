@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"go-job/channel/pull"
+	"go-job/channel/worker"
 	"go-job/config"
 	"go-job/dal"
 	"go-job/snowflake"
@@ -35,6 +37,9 @@ func main() {
 	router.ForwardedByClientIP = true
 	middleware.SetMiddleware(router)
 	handler.Handle(router)
+
+	pull.Init()
+	worker.Init()
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(`:%s`, runPort),
