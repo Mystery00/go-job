@@ -1,0 +1,3 @@
+[submodule "worker/my-worker"]
+	path = worker/my-worker
+	url = git@github.com:Mystery0Tools/go-job-worker.git
