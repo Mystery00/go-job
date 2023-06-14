@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/Mystery00/lumberjack v1.0.3
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/sirupsen/logrus v1.9.3

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go-job/config"
 	"go-job/dal"
+	"go-job/snowflake"
 	"go-job/web/handler"
 	"go-job/web/middleware"
 	"net/http"
@@ -28,6 +29,7 @@ func main() {
 	gin.DisableConsoleColor()
 	gin.SetMode(gin.ReleaseMode)
 	dal.InitDataBase(log)
+	snowflake.Init()
 
 	router := gin.New()
 	router.ForwardedByClientIP = true
