@@ -31,6 +31,7 @@ var job = func(context *gin.Context) {
 		return
 	}
 	save.Job(job.Scope, t, job.Ext)
+	context.Status(http.StatusAccepted)
 }
 
 var jobs = func(context *gin.Context) {
@@ -48,6 +49,7 @@ var jobs = func(context *gin.Context) {
 		}
 		save.Job(job.Scope, t, job.Ext)
 	}
+	context.Status(http.StatusAccepted)
 }
 
 type History struct {
@@ -60,6 +62,7 @@ type JobHistory struct {
 	PrepareExecuteTime int64             `json:"prepareExecuteTime"`
 	Scope              string            `json:"scope"`
 	Success            bool              `json:"success"`
+	Status             string            `json:"status"`
 	ExecuteTime        int64             `json:"executeTime"`
 	Message            string            `json:"message"`
 	Ext                map[string]string `json:"ext"`
@@ -83,12 +86,58 @@ var history = func(context *gin.Context) {
 		if err != nil {
 			logrus.Warnf("unmarshal ext failed, job: %v, err: %v", job, err)
 		}
+		var executeTime int64 = 0
+		if job.ExecuteTime != nil {
+			executeTime = job.ExecuteTime.UnixMilli()
+		}
 		r = append(r, JobHistory{
 			JobId:              job.JobID,
 			PrepareExecuteTime: job.PrepareExecuteTime.UnixMilli(),
 			Scope:              job.Scope,
 			Success:            job.JobStatus == dal.SUCCESS,
-			ExecuteTime:        job.ExecuteTime.UnixMilli(),
+			Status:             dal.Status(job.JobStatus),
+			ExecuteTime:        executeTime,
+			Message:            job.Message,
+			Ext:                ext,
+		})
+	}
+	context.JSON(http.StatusOK, r)
+}
+
+type AllHistory struct {
+	Index int `form:"index" binding:"required"`
+	Size  int `form:"size" binding:"required"`
+}
+
+var allHistory = func(context *gin.Context) {
+	var h AllHistory
+	err := context.ShouldBindQuery(&h)
+	if err != nil {
+		panic(err)
+	}
+	j := dal.Query.Job
+	list, err := j.WithContext(context.Request.Context()).Order(j.PrepareExecuteTime.Desc()).Limit(h.Size).Offset((h.Index - 1) * h.Size).Find()
+	if err != nil {
+		panic(err)
+	}
+	r := make([]JobHistory, 0)
+	for _, job := range list {
+		var ext map[string]string
+		err := json.Unmarshal([]byte(job.Tag), &ext)
+		if err != nil {
+			logrus.Warnf("unmarshal ext failed, job: %v, err: %v", job, err)
+		}
+		var executeTime int64 = 0
+		if job.ExecuteTime != nil {
+			executeTime = job.ExecuteTime.UnixMilli()
+		}
+		r = append(r, JobHistory{
+			JobId:              job.JobID,
+			PrepareExecuteTime: job.PrepareExecuteTime.UnixMilli(),
+			Scope:              job.Scope,
+			Success:            job.JobStatus == dal.SUCCESS,
+			Status:             dal.Status(job.JobStatus),
+			ExecuteTime:        executeTime,
 			Message:            job.Message,
 			Ext:                ext,
 		})

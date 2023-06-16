@@ -16,4 +16,5 @@ func Handle(engine *gin.Engine) {
 	engine.PUT(externalPath+"/job", job)
 	engine.PUT(externalPath+"/jobs", jobs)
 	engine.GET(externalPath+"/history", history)
+	engine.GET(externalPath+"/history/page", allHistory)
 }
