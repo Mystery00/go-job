@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"fmt"
 	"go-job/channel/webhook"
 	"go-job/config"
 	"go-job/dal"
@@ -48,7 +49,7 @@ func doExecute(job model.Job) {
 		if err := recover(); err != nil {
 			logrus.Warnf("execute job failed, err: %v", err)
 			//更新执行状态为失败
-			_, _ = j.Where(j.JobID.Eq(job.JobID)).Update(j.JobStatus, dal.FAILED)
+			_, _ = j.Where(j.JobID.Eq(job.JobID)).Updates(model.Job{JobStatus: dal.FAILED, Message: fmt.Sprintf("%v", err)})
 			scheduledJob, _ := j.Where(j.JobID.Eq(job.JobID)).First()
 			webhook.NewWebhook(*scheduledJob)
 		}
@@ -59,7 +60,7 @@ func doExecute(job model.Job) {
 	//执行任务
 	worker.Execute(job)
 	//更新执行状态为成功
-	_, _ = j.Where(j.JobID.Eq(job.JobID)).Update(j.JobStatus, dal.SUCCESS)
+	_, _ = j.Where(j.JobID.Eq(job.JobID)).Updates(model.Job{JobStatus: dal.SUCCESS, Message: "OK"})
 	scheduledJob, _ := j.Where(j.JobID.Eq(job.JobID)).First()
 	webhook.NewWebhook(*scheduledJob)
 }

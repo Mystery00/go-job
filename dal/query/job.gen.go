@@ -32,6 +32,7 @@ func newJob(db *gorm.DB, opts ...gen.DOOption) job {
 	_job.Scope = field.NewString(tableName, "scope")
 	_job.JobStatus = field.NewInt8(tableName, "job_status")
 	_job.ExecuteTime = field.NewTime(tableName, "execute_time")
+	_job.Message = field.NewString(tableName, "message")
 	_job.Tag = field.NewString(tableName, "tag")
 
 	_job.fillFieldMap()
@@ -48,6 +49,7 @@ type job struct {
 	Scope              field.String // 领域
 	JobStatus          field.Int8   // 任务状态
 	ExecuteTime        field.Time   // 最终执行时间
+	Message            field.String // 任务执行详情
 	Tag                field.String // 任务标签，用在回调
 
 	fieldMap map[string]field.Expr
@@ -70,6 +72,7 @@ func (j *job) updateTableName(table string) *job {
 	j.Scope = field.NewString(table, "scope")
 	j.JobStatus = field.NewInt8(table, "job_status")
 	j.ExecuteTime = field.NewTime(table, "execute_time")
+	j.Message = field.NewString(table, "message")
 	j.Tag = field.NewString(table, "tag")
 
 	j.fillFieldMap()
@@ -87,12 +90,13 @@ func (j *job) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (j *job) fillFieldMap() {
-	j.fieldMap = make(map[string]field.Expr, 6)
+	j.fieldMap = make(map[string]field.Expr, 7)
 	j.fieldMap["job_id"] = j.JobID
 	j.fieldMap["prepare_execute_time"] = j.PrepareExecuteTime
 	j.fieldMap["scope"] = j.Scope
 	j.fieldMap["job_status"] = j.JobStatus
 	j.fieldMap["execute_time"] = j.ExecuteTime
+	j.fieldMap["message"] = j.Message
 	j.fieldMap["tag"] = j.Tag
 }
 

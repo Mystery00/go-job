@@ -17,6 +17,7 @@ type Job struct {
 	Scope              string     `gorm:"column:scope;type:varchar(32);not null;comment:领域" json:"scope"`
 	JobStatus          int8       `gorm:"column:job_status;type:tinyint;not null;comment:任务状态" json:"job_status"`
 	ExecuteTime        *time.Time `gorm:"column:execute_time;type:datetime;comment:最终执行时间" json:"execute_time"`
+	Message            string     `gorm:"column:message;type:varchar(512);not null;comment:任务执行详情" json:"message"`
 	Tag                string     `gorm:"column:tag;type:varchar(255);not null;default:{};comment:任务标签，用在回调" json:"tag"`
 }
 
