@@ -2,12 +2,13 @@ package simple
 
 import (
 	"go-job/dal/model"
+	"go-job/worker"
 
 	"github.com/sirupsen/logrus"
 )
 
 func init() {
-	//worker.Register(&simpleWorker{})
+	worker.Register(&simpleWorker{})
 }
 
 type simpleWorker struct {
