@@ -10,3 +10,13 @@ log:
   file: "bot.log"
   color: true
   local: true
+
+job:
+  wait:
+    time: "10s"
+  worker:
+    num: 10
+
+webhook:
+  url: "https://api.telegram.org/bot"
+  method: "POST"

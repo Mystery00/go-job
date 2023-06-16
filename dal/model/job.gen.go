@@ -14,6 +14,7 @@ const TableNameJob = "job"
 type Job struct {
 	JobID              int64      `gorm:"column:job_id;type:bigint unsigned;primaryKey;comment:任务id" json:"job_id"`
 	PrepareExecuteTime time.Time  `gorm:"column:prepare_execute_time;type:datetime;not null;comment:预期执行时间" json:"prepare_execute_time"`
+	Scope              string     `gorm:"column:scope;type:varchar(32);not null;comment:领域" json:"scope"`
 	JobStatus          int8       `gorm:"column:job_status;type:tinyint;not null;comment:任务状态" json:"job_status"`
 	ExecuteTime        *time.Time `gorm:"column:execute_time;type:datetime;comment:最终执行时间" json:"execute_time"`
 	Tag                string     `gorm:"column:tag;type:varchar(255);not null;default:{};comment:任务标签，用在回调" json:"tag"`

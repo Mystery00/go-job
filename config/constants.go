@@ -20,3 +20,14 @@ const (
 	LogFile  = "log.file"
 	LogColor = "log.color"
 )
+
+const (
+	JobWaitTime  = "job.wait.time"
+	JobWorkerNum = "job.worker.num"
+)
+
+const (
+	WebHookEnable = "webhook.enable"
+	WebHookUrl    = "webhook.url"
+	WebHookMethod = "webhook.method"
+)

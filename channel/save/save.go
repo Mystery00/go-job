@@ -11,6 +11,7 @@ import (
 )
 
 type CreateJob struct {
+	Scope              string
 	PrepareExecuteTime time.Time
 	Ext                map[string]string
 }
@@ -30,8 +31,9 @@ func init() {
 	}()
 }
 
-func Job(prepareExecuteTime time.Time, ext map[string]string) {
+func Job(scope string, prepareExecuteTime time.Time, ext map[string]string) {
 	job := CreateJob{
+		Scope:              scope,
 		PrepareExecuteTime: prepareExecuteTime,
 		Ext:                ext,
 	}
@@ -48,6 +50,7 @@ func doSave(c CreateJob) {
 	job := &model.Job{
 		JobID:              snowflake.NextID(),
 		PrepareExecuteTime: c.PrepareExecuteTime,
+		Scope:              c.Scope,
 		JobStatus:          dal.WAIT,
 		ExecuteTime:        nil,
 		Tag:                string(tag),

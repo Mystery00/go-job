@@ -10,6 +10,8 @@ import (
 	"go-job/snowflake"
 	"go-job/web/handler"
 	"go-job/web/middleware"
+	_ "go-job/worker/my-worker"
+	_ "go-job/worker/simple"
 	"net/http"
 	"os"
 	"os/signal"
