@@ -7,7 +7,7 @@ database:
 
 log:
   home: "logs"
-  file: "bot.log"
+  file: "job.log"
   color: true
   local: true
 
@@ -18,5 +18,6 @@ job:
     num: 10
 
 webhook:
+  enable: false
   url: "https://api.telegram.org/bot"
   method: "POST"
