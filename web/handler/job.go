@@ -5,6 +5,7 @@ import (
 	"go-job/channel/save"
 	"go-job/dal"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -75,7 +76,11 @@ var history = func(context *gin.Context) {
 		panic(err)
 	}
 	j := dal.Query.Job
-	list, err := j.WithContext(context.Request.Context()).Where(j.Scope.Eq(h.Scope)).Order(j.PrepareExecuteTime.Desc()).Limit(h.Size).Find()
+	scopeCondition := j.Scope.Eq(h.Scope)
+	if strings.Contains(h.Scope, "%") {
+		scopeCondition = j.Scope.Like(h.Scope)
+	}
+	list, err := j.WithContext(context.Request.Context()).Where(scopeCondition).Order(j.PrepareExecuteTime.Desc()).Limit(h.Size).Find()
 	if err != nil {
 		panic(err)
 	}
