@@ -63,6 +63,7 @@ type JobHistory struct {
 	PrepareExecuteTime int64             `json:"prepareExecuteTime"`
 	Scope              string            `json:"scope"`
 	Success            bool              `json:"success"`
+	Failed             bool              `json:"failed"`
 	Status             string            `json:"status"`
 	ExecuteTime        int64             `json:"executeTime"`
 	Message            string            `json:"message"`
@@ -100,6 +101,7 @@ var history = func(context *gin.Context) {
 			PrepareExecuteTime: job.PrepareExecuteTime.UnixMilli(),
 			Scope:              job.Scope,
 			Success:            job.JobStatus == dal.SUCCESS,
+			Failed:             job.JobStatus == dal.FAILED,
 			Status:             dal.Status(job.JobStatus),
 			ExecuteTime:        executeTime,
 			Message:            job.Message,
